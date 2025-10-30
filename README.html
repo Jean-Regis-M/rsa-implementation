@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSA Algorithm Implementation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .title {
+            color: #2c3e50;
+            font-size: 3em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: #3498db;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .badge.python { background: #3776ab; }
+        .badge.crypto { background: #e74c3c; }
+        .badge.math { background: #27ae60; }
+        .badge.educational { background: #f39c12; }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .math-section {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .algorithm-steps {
+            counter-reset: step;
+        }
+
+        .algorithm-steps li {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            list-style: none;
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .algorithm-steps li:before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #3498db;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .output-section {
+            background: #34495e;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .output-line {
+            margin: 5px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .success { color: #2ecc71; }
+        .warning { color: #f39c12; }
+        .info { color: #3498db; }
+
+        .button {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">RSA Algorithm Implementation</h1>
+            <p class="subtitle">A Complete Python Implementation of Rivest-Shamir-Adleman Encryption from Scratch</p>
+            <div class="badges">
+                <span class="badge python">Python 3</span>
+                <span class="badge crypto">Cryptography</span>
+                <span class="badge math">Mathematics</span>
+                <span class="badge educational">Educational</span>
+            </div>
+        </header>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2>🚀 Features</h2>
+                <ul class="feature-list">
+                    <li><strong>Complete RSA Implementation</strong> - Full encryption/decryption pipeline</li>
+                    <li><strong>Key Generation</strong> - Customizable key sizes (1024, 2048, 4096 bits)</li>
+                    <li><strong>Miller-Rabin Primality Test</strong> - Probabilistic prime number detection</li>
+                    <li><strong>String & Number Encryption</strong> - Support for both data types</li>
+                    <li><strong>Mathematical Foundations</strong> - All algorithms implemented from scratch</li>
+                    <li><strong>Educational Demonstrations</strong> - Step-by-step examples and verification</li>
+                    <li><strong>No External Dependencies</strong> - Pure Python implementation</li>
+                    <li><strong>Error Handling</strong> - Comprehensive input validation</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>📦 Quick Start</h2>
+                <div class="code-block">
+# Clone the repository<br>
+git clone https://github.com/Jean-Regis-M/rsa-implementation.git<br>
+cd rsa-implementation<br><br>
+
+# Run the demonstration<br>
+python rsa_program.py<br><br>
+
+# Or use directly in your code<br>
+from rsa_program import RSA<br><br>
+
+# Create instance and generate keys<br>
+rsa = RSA(key_size=1024)<br>
+public_key, private_key = rsa.generate_keys()<br><br>
+
+# Encrypt and decrypt<br>
+encrypted = rsa.encrypt_string("Hello, World!")<br>
+decrypted = rsa.decrypt_string(encrypted)
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔐 RSA Algorithm Overview</h2>
+            <p>RSA (Rivest-Shamir-Adleman) is one of the first practical public-key cryptosystems and is widely used for secure data transmission. It's based on the practical difficulty of factoring the product of two large prime numbers.</p>
+            
+            <div class="math-section">
+                <h3>Mathematical Foundation</h3>
+                <p><strong>Key Generation:</strong></p>
+                <ol class="algorithm-steps">
+                    <li>Choose two distinct large prime numbers <span class="highlight">p</span> and <span class="highlight">q</span></li>
+                    <li>Compute <span class="highlight">n = p × q</span> (modulus)</li>
+                    <li>Compute <span class="highlight">φ(n) = (p-1) × (q-1)</span> (Euler's totient function)</li>
+                    <li>Choose public exponent <span class="highlight">e</span> such that 1 < e < φ(n) and gcd(e, φ(n)) = 1</li>
+                    <li>Compute private exponent <span class="highlight">d = e⁻¹ mod φ(n)</span></li>
+                </ol>
+                
+                <p><strong>Encryption:</strong> <span class="highlight">c = mᵉ mod n</span></p>
+                <p><strong>Decryption:</strong> <span class="highlight">m = cᵈ mod n</span></p>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2>💻 Code Examples</h2>
+                <h3>Basic Usage</h3>
+                <div class="code-block">
+# Initialize RSA with 1024-bit keys<br>
+rsa = RSA(key_size=1024)<br><br>
+
+# Generate public and private keys<br>
+public_key, private_key = rsa.generate_keys()<br><br>
+
+# Encrypt a number<br>
+original_number = 42<br>
+encrypted_number = rsa.encrypt(original_number)<br>
+decrypted_number = rsa.decrypt(encrypted_number)<br><br>
+
+print(f"Original: {original_number}")<br>
+print(f"Encrypted: {encrypted_number}")<br>
+print(f"Decrypted: {decrypted_number}")
+                </div>
+
+                <h3>String Encryption</h3>
+                <div class="code-block">
+# Encrypt and decrypt strings<br>
+message = "Secret Message 123!"<br>
+encrypted_chunks = rsa.encrypt_string(message)<br>
+decrypted_message = rsa.decrypt_string(encrypted_chunks)<br><br>
+
+print(f"Original: '{message}'")<br>
+print(f"Decrypted: '{decrypted_message}'")<br>
+print(f"Match: {message == decrypted_message}")
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📊 Example Output</h2>
+                <div class="output-section">
+                    <div class="output-line info">🔐 RSA Algorithm Demonstration</div>
+                    <div class="output-line">==================================================</div>
+                    <div class="output-line">Generating RSA-1024 keys...</div>
+                    <div class="output-line success">✓ Public Key generated</div>
+                    <div class="output-line success">✓ Private Key generated</div>
+                    <div class="output-line">Modulus (n): 597693516363237841920659919806937...</div>
+                    <div class="output-line">Public exponent (e): 65537</div>
+                    <div class="output-line">--------------------------------------------------</div>
+                    <div class="output-line">Testing numeric encryption:</div>
+                    <div class="output-line">Original: 42</div>
+                    <div class="output-line">Encrypted: 468474364566036083619085583251354...</div>
+                    <div class="output-line">Decrypted: 42</div>
+                    <div class="output-line success">✓ Success: True</div>
+                    <div class="output-line">--------------------------------------------------</div>
+                    <div class="output-line">Testing string encryption:</div>
+                    <div class="output-line">Original: 'Hello, RSA Encryption!'</div>
+                    <div class="output-line">Encrypted into 2 chunks</div>
+                    <div class="output-line">Decrypted: 'Hello, RSA Encryption!'</div>
+                    <div class="output-line success">✓ Success: True</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔧 Implementation Details</h2>
+            <h3>Core Components</h3>
+            <ul class="feature-list">
+                <li><strong>Miller-Rabin Primality Test</strong> - Probabilistic test with configurable accuracy</li>
+                <li><strong>Extended Euclidean Algorithm</strong> - For computing modular inverses</li>
+                <li><strong>Modular Exponentiation</strong> - Efficient computation of large powers</li>
+                <li><strong>String Chunking</strong> - Automatic handling of large messages</li>
+                <li><strong>Secure Random Generation</strong> - Using Python's secrets module</li>
+            </ul>
+
+            <h3>Key Sizes Supported</h3>
+            <ul class="feature-list">
+                <li><strong>512 bits</strong> - For testing and education</li>
+                <li><strong>1024 bits</strong> - Standard security (default)</li>
+                <li><strong>2048 bits</strong> - Enhanced security</li>
+                <li><strong>4096 bits</strong> - High security (slower generation)</li>
+            </ul>
+        </div>
+
+        <div class="content-grid">
+            <div class="card">
+                <h2>⚠️ Security Notes</h2>
+                <ul class="feature-list">
+                    <li>This implementation is for <strong>educational purposes</strong></li>
+                    <li>For production use, consider <strong>validated cryptographic libraries</strong></li>
+                    <li>Key generation time increases with key size</li>
+                    <li>Always use <strong>secure random number generators</strong></li>
+                    <li>Be aware of <strong>timing attacks</strong> in production environments</li>
+                    <li>Consider <strong>padding schemes</strong> like OAEP for real-world use</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>🔗 API Reference</h2>
+                <h3>RSA Class Methods</h3>
+                <div class="code-block">
+__init__(key_size=1024)  # Initialize with key size<br>
+generate_keys()          # Generate public/private keys<br>
+encrypt(message)         # Encrypt integer message<br>
+decrypt(ciphertext)      # Decrypt to integer<br>
+encrypt_string(text)     # Encrypt string to chunks<br>
+decrypt_string(chunks)   # Decrypt chunks to string<br>
+is_prime(n)             # Miller-Rabin primality test<br>
+generate_large_prime(bits) # Generate large prime
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="text-align: center;">
+            <h2>🚀 Get Started Now</h2>
+            <p>Ready to explore RSA encryption? Clone the repository and start experimenting!</p>
+            <a href="https://github.com/Jean-Regis-M/rsa-implementation" class="button">📁 View on GitHub</a>
+            <a href="https://github.com/Jean-Regis-M/rsa-implementation/archive/refs/heads/main.zip" class="button">💾 Download ZIP</a>
+            <div style="margin-top: 20px;">
+                <div class="code-block" style="display: inline-block; margin: 10px;">
+git clone https://github.com/Jean-Regis-M/rsa-implementation.git
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Built with ❤️ for educational purposes | RSA Implementation © 2025</p>
+            <p>Understanding cryptography through practical implementation</p>
+        </footer>
+    </div>
+
+    <script>
+        // Add some interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add copy functionality to code blocks
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                block.style.position = 'relative';
+                block.addEventListener('click', function() {
+                    const text = this.innerText;
+                    navigator.clipboard.writeText(text).then(() => {
+                        const original = this.innerText;
+                        this.innerText = 'Copied to clipboard!';
+                        setTimeout(() => {
+                            this.innerText = original;
+                        }, 2000);
+                    });
+                });
+            });
+
+            // Add smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
